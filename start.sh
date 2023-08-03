@@ -1,5 +1,4 @@
 #install python
-sudo su
 apt update
 apt install python3
 apt install python3-pip
@@ -8,17 +7,23 @@ apt install python3-pip
 python3 -m venv env
 
 #activate virtual env
-source env/bin/activate
+chmod 777 env/bin/activate
+env/bin/activate
 
 #install packages
-pip3 install -r requirements.txt
+chmod 777 env/bin/pip
+env/bin/pip install -r requirements.txt
 
 #install nginx
 apt install nginx
 
 # copy gunicorn socket and service files
+rm -f /etc/systemd/system/gunicorn.socket
+rm -f /etc/systemd/system/gunicorn.service
 cp ./gunicorn.socket /etc/systemd/system/
 cp ./gunicorn.service /etc/systemd/system/
+
+sudo systemctl daemon-reload
 
 # start gunicorn socket
 systemctl start gunicorn.socket
@@ -39,9 +44,12 @@ systemctl daemon-reload
 systemctl restart gunicorn
 
 #copy nginx config file
-cp ./api.nginx.conf /etc/nginx/sites-available/api
+rm -f /etc/nginx/sites-available/api
+cp --rf ./api.nginx.conf /etc/nginx/sites-available/api
+
 
 #create a link
+unlink /etc/nginx/sites-enabled/api
 ln -s /etc/nginx/sites-available/api /etc/nginx/sites-enabled
 
 #test nginx config
