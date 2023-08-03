@@ -44,12 +44,11 @@ systemctl daemon-reload
 systemctl restart gunicorn
 
 #copy nginx config file
-rm -f /etc/nginx/sites-available/api
-cp --rf ./api.nginx.conf /etc/nginx/sites-available/api
+sudo cp --f ./api.nginx.conf /etc/nginx/sites-available/api
 
 
 #create a link
-unlink /etc/nginx/sites-enabled/api
+sudo unlink /etc/nginx/sites-enabled/api
 ln -s /etc/nginx/sites-available/api /etc/nginx/sites-enabled
 
 #test nginx config
